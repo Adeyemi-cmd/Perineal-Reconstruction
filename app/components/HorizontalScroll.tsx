@@ -26,40 +26,40 @@ export default function HorizontalScroll() {
   useLayoutEffect(() => {
     if (typeof window === "undefined") return;
 
-    const section = sectionRef.current!;
-    const container = containerRef.current!;
+    const section = sectionRef.current;
+    const container = containerRef.current;
     if (!section || !container) return;
 
     const ctx = gsap.context(() => {
-      const getDistance = () => {
-        const styles = getComputedStyle(section);
-        const padLeft = parseFloat(styles.paddingLeft) || 0;
-        const padRight = parseFloat(styles.paddingRight) || 0;
-        const contentViewport = section.clientWidth - padLeft - padRight; // padding-aware
-        return Math.max(0, container.scrollWidth - contentViewport);
-      };
+      const mm = gsap.matchMedia();
 
-      const tween = gsap.to(container, {
-        x: () => `-${getDistance()}`,
-        ease: "none",
-        scrollTrigger: {
-          trigger: section,
-          start: "top top",
-          end: () => `+=${getDistance()}`,
-          pin: true,
-          scrub: 1,
-          invalidateOnRefresh: true,
-        },
+      mm.add("(min-width: 768px)", () => {
+        const getDistance = () => {
+          const styles = getComputedStyle(section);
+          const padLeft = parseFloat(styles.paddingLeft) || 0;
+          const padRight = parseFloat(styles.paddingRight) || 0;
+          const contentViewport = section.clientWidth - padLeft - padRight;
+          return Math.max(0, container.scrollWidth - contentViewport);
+        };
+
+        const tween = gsap.to(container, {
+          x: () => `-${getDistance()}`,
+          ease: "none",
+          scrollTrigger: {
+            trigger: section,
+            start: "top top",
+            end: () => `+=${getDistance()}`,
+            pin: true,
+            scrub: 1,
+            invalidateOnRefresh: true,
+          },
+        });
+
+        return () => {
+          tween.scrollTrigger?.kill();
+          tween.kill();
+        };
       });
-
-      const onResize = () => ScrollTrigger.refresh();
-      window.addEventListener("resize", onResize);
-
-      return () => {
-        window.removeEventListener("resize", onResize);
-        tween.kill();
-        ScrollTrigger.getAll().forEach((t) => t.kill());
-      };
     }, section);
 
     return () => ctx.revert();
@@ -69,15 +69,20 @@ export default function HorizontalScroll() {
     const imgs = containerRef.current?.querySelectorAll("img") ?? [];
     let remaining = imgs.length;
     if (!remaining) return;
+
     const onLoad = () => {
       remaining -= 1;
       if (remaining === 0) ScrollTrigger.refresh();
     };
+
     imgs.forEach((img) => {
       if (img.complete) onLoad();
       else img.addEventListener("load", onLoad, { once: true });
     });
-    return () => imgs.forEach((img) => img.removeEventListener("load", onLoad));
+
+    return () => {
+      imgs.forEach((img) => img.removeEventListener("load", onLoad));
+    };
   }, []);
 
   return (
@@ -90,9 +95,7 @@ export default function HorizontalScroll() {
               <p>{image.caption}</p>
             </div>
 
-            {/* Arrow badge */}
             <button className="arrow" aria-label="View project">
-              {/* SVG arrow (no external icon lib needed) */}
               <svg
                 width="18"
                 height="18"
