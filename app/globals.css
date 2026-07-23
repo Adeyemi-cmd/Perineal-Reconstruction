@@ -363,19 +363,25 @@ select {
   }
 }
 
-/* ==========================our_work================ */
-
-.our_work_padding_block {
-  padding: 3rem clamp(1rem, 5vw, 7.244rem) 0;
+/*=============== horizontal scroll section =============== */
+.section {
+  position: relative;
+  overflow: hidden;
+  height: 100vh;
+  padding: 0 clamp(1rem, 5vw, 7.244rem);
+  display: flex;
+  flex-direction: column;
 }
 
-.our_work {
+.our_work_header {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  flex-shrink: 0;
+  padding: 3rem 0 .5rem;
 }
 
-.our_work h3 {
+.our_work_header h3 {
   font-size: var(--fs-800);
   font-weight: var(--nav-fw);
   font-family: var(--font-el-messiri), sans-serif;
@@ -393,27 +399,19 @@ select {
   transition: all 0.7s ease;
 }
 
-/*=============== horizontal scroll section =============== */
-.section {
-  position: relative;
-  overflow: hidden;
-  height: 100vh;
-  padding: 0 clamp(1rem, 5vw, 7.244rem) 0;
-}
-
 .container {
-  padding-top: 2em;
+  flex: 1;
   display: flex;
   align-items: center;
   gap: 1.5em;
+  min-height: 0;
 }
 
 .item {
-  position: relative; /* needed so arrow can anchor top-right */
+  position: relative;
   flex: 0 0 auto;
   width: clamp(240px, 32vw, 680.25px);
   aspect-ratio: 4/5;
-  padding-top: 1em;
 }
 
 .item img {

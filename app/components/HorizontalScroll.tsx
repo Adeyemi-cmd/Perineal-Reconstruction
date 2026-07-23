@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useLayoutEffect, useEffect } from "react";
+import Link from "next/link";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
@@ -87,6 +88,10 @@ export default function HorizontalScroll() {
 
   return (
     <section className="section" ref={sectionRef}>
+      <div className="our_work_header">
+        <h3>Our Work</h3>
+        <Link href="/" className="project_link">VIEW ALL PROJECTS</Link>
+      </div>
       <div className="container" ref={containerRef}>
         {images.map((image, i) => (
           <div className="item" key={i}>

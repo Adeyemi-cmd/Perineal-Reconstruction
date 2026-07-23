@@ -58,16 +58,6 @@ export default function Home() {
       </section>
       <FaqSection />
 
-      <section>
-        <div className="our_work_padding_block">
-          <div className="our_work">
-            <h3>Our Work</h3>
-            <Link href="/" className="project_link">
-              VIEW ALL PROJECTS
-            </Link>
-          </div>
-        </div>
-      </section>
       <HorizontalScroll />
       <section>
         <div className="even_container">
